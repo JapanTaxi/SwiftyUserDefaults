@@ -26,10 +26,10 @@ import Foundation
 
 public extension UserDefaults {
     class Proxy {
-        private let defaults: UserDefaults
-        private let key: String
+        let defaults: UserDefaults
+        let key: String
         
-        private init(_ defaults: UserDefaults, _ key: String) {
+        public init(_ defaults: UserDefaults, _ key: String) {
             self.defaults = defaults
             self.key = key
         }
@@ -45,11 +45,11 @@ public extension UserDefaults {
         }
         
         public var array: NSArray? {
-            return defaults.array(forKey: key)
+            return defaults.array(forKey: key) as NSArray?
         }
         
         public var dictionary: NSDictionary? {
-            return defaults.dictionary(forKey: key)
+            return defaults.dictionary(forKey: key) as NSDictionary?
         }
         
         public var data: Data? {
@@ -185,7 +185,7 @@ public let Defaults = UserDefaults.standard
 /// so you can use the shortcut dot notation (e.g. `Defaults[.yourKey]`)
 
 public class DefaultsKeys {
-    private init() {}
+    init() {}
 }
 
 /// Base class for static user defaults keys. Specialize with value type
@@ -196,7 +196,9 @@ public class DefaultsKey<ValueType>: DefaultsKeys {
     public let _key: String
     
     public init(_ key: String) {
+        
         self._key = key
+        
     }
 }
 
@@ -236,12 +238,12 @@ extension UserDefaults {
         set { set(key, newValue) }
     }
     public subscript(key: DefaultsKey<NSString?>) -> NSString? {
-        get { return string(forKey: key._key) }
+        get { return (string(forKey: key._key)) as NSString? }
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<NSString>) -> NSString {
-        get { return string(forKey: key._key) ?? "" }
+        get { return (string(forKey: key._key) ?? "") as NSString }
         set { set(key, newValue) }
     }
     
@@ -276,7 +278,7 @@ extension UserDefaults {
     }
     
     public subscript(key: DefaultsKey<AnyObject?>) -> AnyObject? {
-        get { return object(forKey: key._key) }
+        get { return object(forKey: key._key) as AnyObject }
         set { set(key, newValue) }
     }
     
@@ -308,22 +310,22 @@ extension UserDefaults {
     // TODO: It would probably make sense to have support for statically typed dictionaries (e.g. [String: String])
     
     public subscript(key: DefaultsKey<[String: AnyObject]?>) -> [String: AnyObject]? {
-        get { return dictionary(forKey: key._key) }
+        get { return dictionary(forKey: key._key) as [String: AnyObject]? }
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<[String: AnyObject]>) -> [String: AnyObject] {
-        get { return dictionary(forKey: key._key) ?? [:] }
+        get { return (dictionary(forKey: key._key) ?? [:]) as [String: AnyObject] }
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<NSDictionary?>) -> NSDictionary? {
-        get { return dictionary(forKey: key._key) }
+        get { return dictionary(forKey: key._key) as NSDictionary?}
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<NSDictionary>) -> NSDictionary {
-        get { return dictionary(forKey: key._key) ?? [:] }
+        get { return (dictionary(forKey: key._key) ?? [:]) as NSDictionary }
         set { set(key, newValue) }
     }
 }
@@ -332,22 +334,22 @@ extension UserDefaults {
 
 extension UserDefaults {
     public subscript(key: DefaultsKey<NSArray?>) -> NSArray? {
-        get { return array(forKey: key._key) }
+        get { return array(forKey: key._key) as NSArray? }
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<NSArray>) -> NSArray {
-        get { return array(forKey: key._key) ?? [] }
+        get { return (array(forKey: key._key) ?? []) as NSArray }
         set { set(key, newValue) }
     }
 
     public subscript(key: DefaultsKey<[AnyObject]?>) -> [AnyObject]? {
-        get { return array(forKey: key._key) }
+        get { return array(forKey: key._key) as [AnyObject]?}
         set { set(key, newValue) }
     }
     
     public subscript(key: DefaultsKey<[AnyObject]>) -> [AnyObject] {
-        get { return array(forKey: key._key) ?? [] }
+        get { return (array(forKey: key._key) ?? []) as [AnyObject] }
         set { set(key, newValue) }
     }
 }
